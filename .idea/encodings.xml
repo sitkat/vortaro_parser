@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/src/main/resources/06_je.txt" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/files/01_a.txt" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/files/02_b.txt" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/files/06_je.txt" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/files/06_je.txt" charset="windows-1251" />
   </component>
 </project>
