@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 
 fun main() {
-    var text = translation1.text
+    var text = translation2.text
 
     val translations = text.split("\n\n")
     val failedTranslations = mutableListOf<Pair<String, String>>()
@@ -116,7 +116,10 @@ fun main() {
             wordTranslations.add(matchedTranslation)
         }
         increment += 1
-        entries.add(Entry(increment,dates.firstOrNull() ?: LocalDateTime.now().toString(), word, description?.replace("_", "")?.replace("(", "")?.replace(")", ""), wordTranslations))
+        entries.add(Entry(increment,dates.firstOrNull() ?: LocalDateTime.now().toString(),
+                word.replace("_", "").replace("(", "").replace(")", "").replace("?", ""),
+                description?.replace("_", "")?.replace("(", "")?.replace(")", "")?.replace("?", ""),
+                wordTranslations))
 
         val subsequentSimpleTranslations = subsequentSimpleTranslationRegex.findAll(translation)
         for (sst in subsequentSimpleTranslations) {
@@ -139,7 +142,10 @@ fun main() {
                 wordTranslations.add(matchedTranslation)
             }
             increment += 1
-            entries.add(Entry(increment,dates.firstOrNull() ?: LocalDateTime.now().toString(), word, description?.replace("_", "")?.replace("(", "")?.replace(")", ""), wordTranslations))
+            entries.add(Entry(increment,dates.firstOrNull() ?: LocalDateTime.now().toString(),
+                    word.replace("_", "").replace("(", "").replace(")", "").replace("?", ""),
+                    description?.replace("_", "")?.replace("(", "")?.replace(")", "")?.replace("?", ""),
+                    wordTranslations))
         }
 
         val subsequentSimpleWeirdTranslations = sstWeirdRegex.findAll(translation)
@@ -162,7 +168,10 @@ fun main() {
                 wordTranslations.add(matchedTranslation)
             }
             increment += 1
-            entries.add(Entry(increment,dates.firstOrNull() ?: LocalDateTime.now().toString(), word, description, wordTranslations))
+            entries.add(Entry(increment,dates.firstOrNull() ?: LocalDateTime.now().toString(),
+                    word.replace("_", "").replace("(", "").replace(")", "").replace("?", ""),
+                    description?.replace("_", "")?.replace("(", "")?.replace(")", "")?.replace("?", ""),
+                    wordTranslations))
         }
     }
 //    println(entries)
@@ -177,25 +186,25 @@ fun main() {
 
     for (o in entries) {
 
-        val sql = """
-        INSERT INTO Word (edition, title, translation, description) VALUES ('${o.date.replace("'","''")}','' ||
-                                                                                   '${o.word.replace("'","''").replace("(", "").replace(")", "").replace("<<", "").replace(">>", "")}',
-                                                                                   '${if (o.translations.isNotEmpty()) o.translations.reduce { acc, s -> acc + s + "; " }.trim().replace("'","''").replace("(", "").replace(")", "").replace("<<", "").replace(">>", "") else ""}',
-                                                                                   '${o.description?.replace("'","''")}')
-    """.trimIndent()
-        val statement = connectionNotAuth.createStatement()
-        statement.execute(sql)
-
-
-//        var user_id = 1
-//        val sqlNew = """
-//        INSERT INTO _word (id, edition, title, translation, description, user_id) VALUES ('${o.id}','${o.date.replace("'","''")}',
-//'${o.word.replace("'","''").replace("(", "").replace(")", "").replace("<<", "").replace(">>", "")}',
-//'${if (o.translations.isNotEmpty()) o.translations.reduce { acc, s -> acc + s + "; " }.trim().replace("'","''").replace("(", "").replace(")", "").replace("<<", "").replace(">>", "") else ""}',
-//'${o.description?.replace("'","''")}', '${user_id}')
+//        val sql = """
+//        INSERT INTO Word (edition, title, translation, description) VALUES ('${o.date.replace("'","''")}','' ||
+//                                                                                   '${o.word.replace("'","''").replace("(", "").replace(")", "").replace("<<", "").replace(">>", "")}',
+//                                                                                   '${if (o.translations.isNotEmpty()) o.translations.reduce { acc, s -> acc + s + "; " }.trim().replace("'","''").replace("(", "").replace(")", "").replace("<<", "").replace(">>", "") else ""}',
+//                                                                                   '${o.description?.replace("'","''")}')
 //    """.trimIndent()
-//        val statement = connectionAuth.createStatement()
-//        statement.execute(sqlNew)
+//        val statement = connectionNotAuth.createStatement()
+//        statement.execute(sql)
+
+
+        var user_id = 1
+        val sqlNew = """
+        INSERT INTO _word (id, edition, title, translation, description, user_id) VALUES ('${o.id}','${o.date.replace("'","''")}',
+'${o.word.replace("'","''").replace("(", "").replace(")", "").replace("<<", "").replace(">>", "")}',
+'${if (o.translations.isNotEmpty()) o.translations.reduce { acc, s -> acc + s + "; " }.trim().replace("'","''").replace("(", "").replace(")", "").replace("<<", "").replace(">>", "") else ""}',
+'${o.description?.replace("'","''")}', '${user_id}')
+    """.trimIndent()
+        val statement = connectionAuth.createStatement()
+        statement.execute(sqlNew)
 
     }
 }
